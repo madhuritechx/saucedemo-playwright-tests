@@ -33,7 +33,12 @@ export default defineConfig({
     {
       name: 'logged-out',
       testMatch: /login\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // Login is the behaviour under test, so never start authenticated —
+        // stated explicitly so a future global storageState can't leak in.
+        storageState: undefined,
+      },
     },
     {
       name: 'authenticated',

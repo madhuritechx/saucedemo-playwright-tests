@@ -12,6 +12,8 @@ export class CheckoutPage {
   readonly postalCodeInput: Locator;
   readonly continueButton: Locator;
   readonly finishButton: Locator;
+  readonly errorMessage: Locator;
+  readonly overviewItemNames: Locator;
   readonly subtotalLabel: Locator;
   readonly taxLabel: Locator;
   readonly totalLabel: Locator;
@@ -24,6 +26,8 @@ export class CheckoutPage {
     this.postalCodeInput = page.getByTestId('postalCode');
     this.continueButton = page.getByTestId('continue');
     this.finishButton = page.getByTestId('finish');
+    this.errorMessage = page.getByTestId('error');
+    this.overviewItemNames = page.locator('.cart_item .inventory_item_name');
     this.subtotalLabel = page.locator('.summary_subtotal_label');
     this.taxLabel = page.locator('.summary_tax_label');
     this.totalLabel = page.locator('.summary_total_label');

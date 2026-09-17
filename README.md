@@ -40,7 +40,7 @@ meaningful assertions and a structure that would scale.
 
 ## Setup
 
-Requires [Node.js](https://nodejs.org/) 18 or newer.
+Requires [Node.js](https://nodejs.org/) 20 or newer (required by Playwright 1.63+).
 
 ```bash
 # 1. Install dependencies
@@ -79,23 +79,27 @@ most, deliberately spread across different **risk categories**:
 | **Login — invalid password** | Negative / security | Exact error message, user stays on login page |
 | **Login — locked-out user** | Negative | Exact locked-out message |
 | **Cart integrity** | State management | Badge count updates on add **and** remove; cart holds the right item |
-| **Checkout** | Core business flow | Item total matches product prices, item total + tax = grand total, order confirmed |
+| **Checkout** | Core business flow | Overview lists the right products; item total matches prices; item total + tax = grand total; order confirmed |
+| **Checkout validation** | Negative / form | Missing first name is blocked with the correct error, stays on the form |
 
 ## Design decisions
 
 - **Page Object Model** — selectors and actions live in one place per screen,
   so tests read like plain English and a UI change is a one-line fix.
-- **`data-test` selectors** — Sauce Demo exposes stable `data-test` hooks, so
-  `testIdAttribute` is set to `data-test` and tests use `getByTestId`. No
-  brittle CSS or text selectors that break on restyling.
+- **Prefer `data-test` hooks** — Sauce Demo exposes stable `data-test`
+  attributes, so `testIdAttribute` is set to `data-test` and interactions use
+  `getByTestId`. Where the site provides no test id (e.g. product cards, price
+  and summary labels) the page objects use its stable structural CSS classes
+  rather than fragile text or nth-child selectors.
 - **Login once, reuse the session** — `auth.setup.ts` logs in through the UI
   and saves the storage state; the cart and checkout suites reuse it via a
   project dependency, so they stay focused and fast. The login suite itself
   still runs against the real login screen.
 - **Meaningful assertions** — assert *outcomes* (exact error text, badge
   counts, price maths, order confirmation), not just that a page loaded.
-- **Web-first assertions** — `expect(locator).toHaveText(...)` etc. auto-wait,
-  so there are no hard-coded sleeps and the suite is not flaky.
+- **Web-first assertions** — `expect(locator).toHaveText(...)` etc. auto-wait
+  and retry, so there are no hard-coded sleeps, which reduces timing-related
+  flakiness.
 
 ---
 
@@ -109,8 +113,11 @@ priority order, I would add:
   option is selectable.
 - **Fuller cart / checkout coverage** — remove-from-cart on the cart page,
   "Continue Shopping", and cancelling out of checkout.
-- **Checkout form validation** — missing first name / last name / postcode
-  should each show the right error and block progress.
+- **Fuller checkout form validation** — the suite covers a missing first name;
+  I would extend it to last name and postcode, ideally data-driven.
+- **Independent tax validation** — the checkout test verifies the totals are
+  self-consistent (item total + tax = grand total); with more time I would also
+  assert the tax equals the expected percentage of the subtotal.
 - **Problem users** — Sauce Demo ships `problem_user` and
   `performance_glitch_user`; I would use them to catch broken images, wrong
   links, and slow-loading behaviour.

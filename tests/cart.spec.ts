@@ -27,6 +27,7 @@ test.describe('Cart', () => {
     await inventory.openCart();
     const cart = new CartPage(page);
     await expect(page).toHaveURL(/cart\.html/);
-    expect(await cart.getItemNames()).toEqual([PRODUCTS.backpack]);
+    // toHaveText with an array auto-retries and asserts the exact count too.
+    await expect(cart.itemNames).toHaveText([PRODUCTS.backpack]);
   });
 });

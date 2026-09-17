@@ -30,6 +30,13 @@ test.describe('Checkout', () => {
 
     await checkout.fillInformation('Madhuri', 'Penmetsa', 'M1 1AA');
 
+    // The overview must list exactly the products we chose — not just the
+    // right number of rows or the right total (which could coincide).
+    await expect(checkout.overviewItemNames).toHaveText([
+      PRODUCTS.backpack,
+      PRODUCTS.bikeLight,
+    ]);
+
     // Money integrity: the item total matches the products, and
     // item total + tax equals the grand total shown to the customer.
     const subtotal = await checkout.getSubtotal();
@@ -43,5 +50,22 @@ test.describe('Checkout', () => {
 
     await expect(page).toHaveURL(/checkout-complete\.html/);
     await expect(checkout.completeHeader).toHaveText('Thank you for your order!');
+  });
+
+  test('checkout is blocked when the first name is missing', async ({ page }) => {
+    const inventory = new InventoryPage(page);
+    const cart = new CartPage(page);
+    const checkout = new CheckoutPage(page);
+
+    await page.goto('/inventory.html');
+    await inventory.addItemToCart(PRODUCTS.backpack);
+    await inventory.openCart();
+    await cart.checkout();
+
+    // Try to continue with no customer details entered.
+    await checkout.continueButton.click();
+
+    await expect(checkout.errorMessage).toHaveText('Error: First Name is required');
+    await expect(page).toHaveURL(/checkout-step-one\.html/);
   });
 });
