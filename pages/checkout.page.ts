@@ -25,10 +25,10 @@ export class CheckoutPage {
     this.continueButton = page.getByTestId('continue');
     this.finishButton = page.getByTestId('finish');
     this.errorMessage = page.getByTestId('error');
-    this.overviewItemNames = page.locator('.cart_item .inventory_item_name');
-    this.subtotalLabel = page.locator('.summary_subtotal_label');
-    this.taxLabel = page.locator('.summary_tax_label');
-    this.totalLabel = page.locator('.summary_total_label');
+    this.overviewItemNames = page.getByTestId('inventory-item-name');
+    this.subtotalLabel = page.getByTestId('subtotal-label');
+    this.taxLabel = page.getByTestId('tax-label');
+    this.totalLabel = page.getByTestId('total-label');
     this.completeHeader = page.getByTestId('complete-header');
   }
 

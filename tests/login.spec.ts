@@ -18,7 +18,7 @@ test.describe('Login', () => {
     await loginPage.login(USERS.standard.username, USERS.standard.password);
 
     await expect(page).toHaveURL(/inventory\.html/);
-    await expect(page.locator('.inventory_item')).toHaveCount(6);
+    await expect(page.getByTestId('inventory-item')).toHaveCount(6);
   });
 
   test('invalid password is rejected with a clear error', async ({ page }) => {

@@ -9,8 +9,8 @@ export class CartPage {
   readonly checkoutButton: Locator;
 
   constructor(page: Page) {
-    this.cartItems = page.locator('.cart_item');
-    this.itemNames = this.cartItems.locator('.inventory_item_name');
+    this.cartItems = page.getByTestId('inventory-item');
+    this.itemNames = this.cartItems.getByTestId('inventory-item-name');
     this.checkoutButton = page.getByTestId('checkout');
   }
 

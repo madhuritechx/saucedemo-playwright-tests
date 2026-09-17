@@ -8,32 +8,28 @@ export class InventoryPage {
   readonly cartLink: Locator;
 
   constructor(readonly page: Page) {
-    this.cartBadge = page.locator('.shopping_cart_badge');
-    this.cartLink = page.locator('.shopping_cart_link');
+    this.cartBadge = page.getByTestId('shopping-cart-badge');
+    this.cartLink = page.getByTestId('shopping-cart-link');
   }
 
   /** A single product card, located by its exact visible name. */
   private itemCard(itemName: string): Locator {
-    return this.page.locator('.inventory_item').filter({
+    return this.page.getByTestId('inventory-item').filter({
       has: this.page.getByText(itemName, { exact: true }),
     });
   }
 
   async addItemToCart(itemName: string): Promise<void> {
-    await this.itemCard(itemName)
-      .getByRole('button', { name: 'Add to cart', exact: true })
-      .click();
+    await this.itemCard(itemName).getByRole('button', { name: 'Add to cart', exact: true }).click();
   }
 
   async removeItemFromCart(itemName: string): Promise<void> {
-    await this.itemCard(itemName)
-      .getByRole('button', { name: 'Remove', exact: true })
-      .click();
+    await this.itemCard(itemName).getByRole('button', { name: 'Remove', exact: true }).click();
   }
 
   /** Reads the price shown on a product card, e.g. "$29.99". */
   async getItemPrice(itemName: string): Promise<string> {
-    return (await this.itemCard(itemName).locator('.inventory_item_price').innerText()).trim();
+    return (await this.itemCard(itemName).getByTestId('inventory-item-price').innerText()).trim();
   }
 
   async openCart(): Promise<void> {

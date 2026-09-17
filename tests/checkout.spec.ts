@@ -30,12 +30,9 @@ test.describe('Checkout', () => {
 
     await checkout.fillInformation('Madhuri', 'Penmetsa', 'M1 1AA');
 
-    // The overview must list exactly the products we chose — not just the
+    // The overview must list exactly the products we chose, not just the
     // right number of rows or the right total (which could coincide).
-    await expect(checkout.overviewItemNames).toHaveText([
-      PRODUCTS.backpack,
-      PRODUCTS.bikeLight,
-    ]);
+    await expect(checkout.overviewItemNames).toHaveText([PRODUCTS.backpack, PRODUCTS.bikeLight]);
 
     // Money integrity: the item total matches the products, and
     // item total + tax equals the grand total shown to the customer.

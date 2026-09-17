@@ -15,7 +15,7 @@ setup('authenticate as standard user', async ({ page }) => {
 
   // Confirm the login actually succeeded before we trust the saved state.
   await expect(page).toHaveURL(/inventory\.html/);
-  await expect(page.locator('.inventory_list')).toBeVisible();
+  await expect(page.getByTestId('inventory-list')).toBeVisible();
 
   await page.context().storageState({ path: AUTH_FILE });
 });
