@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test';
+import type { Page, Locator } from '@playwright/test';
 
 /** Turns "Sauce Labs Backpack" into the "sauce-labs-backpack" slug Sauce Demo
  *  uses inside its data-test hooks (e.g. add-to-cart-sauce-labs-backpack). */
@@ -10,12 +10,10 @@ function toSlug(itemName: string): string {
  * The products / inventory screen shown after a successful login.
  */
 export class InventoryPage {
-  readonly page: Page;
   readonly cartBadge: Locator;
   readonly cartLink: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(readonly page: Page) {
     this.cartBadge = page.locator('.shopping_cart_badge');
     this.cartLink = page.locator('.shopping_cart_link');
   }
@@ -36,12 +34,6 @@ export class InventoryPage {
   /** Reads the price shown on a product card, e.g. "$29.99". */
   async getItemPrice(itemName: string): Promise<string> {
     return (await this.itemCard(itemName).locator('.inventory_item_price').innerText()).trim();
-  }
-
-  /** The number on the cart badge, or 0 when the badge is not shown. */
-  async getCartCount(): Promise<number> {
-    if ((await this.cartBadge.count()) === 0) return 0;
-    return Number(await this.cartBadge.innerText());
   }
 
   async openCart(): Promise<void> {

@@ -1,17 +1,15 @@
-import { type Page, type Locator } from '@playwright/test';
+import type { Page, Locator } from '@playwright/test';
 
 /**
  * The login screen ( https://www.saucedemo.com/ ).
  */
 export class LoginPage {
-  readonly page: Page;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(readonly page: Page) {
     this.usernameInput = page.getByTestId('username');
     this.passwordInput = page.getByTestId('password');
     this.loginButton = page.getByTestId('login-button');

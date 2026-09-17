@@ -12,14 +12,13 @@ test.describe('Cart', () => {
     const inventory = new InventoryPage(page);
     await page.goto('/inventory.html');
 
-    // Cart starts empty (no badge shown).
-    expect(await inventory.getCartCount()).toBe(0);
+    // Cart starts empty — no badge is rendered at all.
+    await expect(inventory.cartBadge).toHaveCount(0);
 
     await inventory.addItemToCart(PRODUCTS.backpack);
     await inventory.addItemToCart(PRODUCTS.bikeLight);
     await expect(inventory.cartBadge).toHaveText('2');
 
-    // Removing one item decrements the badge.
     await inventory.removeItemFromCart(PRODUCTS.bikeLight);
     await expect(inventory.cartBadge).toHaveText('1');
 

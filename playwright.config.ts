@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { AUTH_FILE } from './tests/test-data';
 
 /**
  * Playwright configuration for the Sauce Demo test suite.
@@ -46,7 +47,7 @@ export default defineConfig({
       dependencies: ['setup'],
       use: {
         ...devices['Desktop Chrome'],
-        storageState: '.auth/user.json',
+        storageState: AUTH_FILE,
       },
     },
   ],

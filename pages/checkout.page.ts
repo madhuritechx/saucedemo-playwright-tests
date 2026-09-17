@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test';
+import type { Page, Locator } from '@playwright/test';
 import { parseAmount } from '../utils/money';
 
 /**
@@ -6,7 +6,6 @@ import { parseAmount } from '../utils/money';
  * overview ( /checkout-step-two.html ) and complete ( /checkout-complete.html ).
  */
 export class CheckoutPage {
-  readonly page: Page;
   readonly firstNameInput: Locator;
   readonly lastNameInput: Locator;
   readonly postalCodeInput: Locator;
@@ -20,7 +19,6 @@ export class CheckoutPage {
   readonly completeHeader: Locator;
 
   constructor(page: Page) {
-    this.page = page;
     this.firstNameInput = page.getByTestId('firstName');
     this.lastNameInput = page.getByTestId('lastName');
     this.postalCodeInput = page.getByTestId('postalCode');
