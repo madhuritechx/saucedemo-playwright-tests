@@ -1,11 +1,5 @@
 import type { Page, Locator } from '@playwright/test';
 
-/** Turns "Sauce Labs Backpack" into the "sauce-labs-backpack" slug Sauce Demo
- *  uses inside its data-test hooks (e.g. add-to-cart-sauce-labs-backpack). */
-function toSlug(itemName: string): string {
-  return itemName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
-
 /**
  * The products / inventory screen shown after a successful login.
  */
@@ -18,17 +12,23 @@ export class InventoryPage {
     this.cartLink = page.locator('.shopping_cart_link');
   }
 
-  /** A single product card, located by its visible name. */
+  /** A single product card, located by its exact visible name. */
   private itemCard(itemName: string): Locator {
-    return this.page.locator('.inventory_item').filter({ hasText: itemName });
+    return this.page.locator('.inventory_item').filter({
+      has: this.page.getByText(itemName, { exact: true }),
+    });
   }
 
   async addItemToCart(itemName: string): Promise<void> {
-    await this.page.getByTestId(`add-to-cart-${toSlug(itemName)}`).click();
+    await this.itemCard(itemName)
+      .getByRole('button', { name: 'Add to cart', exact: true })
+      .click();
   }
 
   async removeItemFromCart(itemName: string): Promise<void> {
-    await this.page.getByTestId(`remove-${toSlug(itemName)}`).click();
+    await this.itemCard(itemName)
+      .getByRole('button', { name: 'Remove', exact: true })
+      .click();
   }
 
   /** Reads the price shown on a product card, e.g. "$29.99". */

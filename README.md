@@ -86,11 +86,13 @@ most, deliberately spread across different **risk categories**:
 
 - **Page Object Model** — selectors and actions live in one place per screen,
   so tests read like plain English and a UI change is a one-line fix.
-- **Prefer `data-test` hooks** — Sauce Demo exposes stable `data-test`
-  attributes, so `testIdAttribute` is set to `data-test` and interactions use
-  `getByTestId`. Where the site provides no test id (e.g. product cards, price
-  and summary labels) the page objects use its stable structural CSS classes
-  rather than fragile text or nth-child selectors.
+- **Stable, user-facing locators** — form and navigation controls use Sauce
+  Demo's `data-test` hooks (`testIdAttribute` + `getByTestId`). On the product
+  grid, items are found by their visible name and acted on by button role
+  (`getByRole('button', { name: 'Add to cart' })`), so a test reads like a user
+  action and does not depend on how the site builds its element IDs. Structural
+  CSS classes are used only for read-only bits with no better hook (price and
+  summary labels).
 - **Login once, reuse the session** — `auth.setup.ts` logs in through the UI
   and saves the storage state; the cart and checkout suites reuse it via a
   project dependency, so they stay focused and fast. The login suite itself
