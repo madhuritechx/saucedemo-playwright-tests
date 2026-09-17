@@ -1,0 +1,8 @@
+node_modules
+playwright-report
+test-results
+.auth
+package-lock.json
+
+# Markdown is hand-formatted (Prettier pads tables into very wide lines)
+*.md
