@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Playwright output
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Saved authentication state (contains a session token, never commit)
+/.auth/
+
+# OS / editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Environment
+.env
